@@ -1,8 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <stdint.h>
+#include "ReadingAndSpliting.h"
 
 void checking_opening_file(int file_descriptor) {
     if (file_descriptor < 0) {
