@@ -10,7 +10,7 @@ typedef unsigned int data;
 unsigned int stupid_hash(const char* str);
 
 int const MEMORY_FOR_LINE_ENDING = 1;
-#define AMOUNT_USED_BYTES current_byte_index - 1
+#define AMOUNT_USED_BYTES current_byte_index
 
 int main(int argc, char** argv) {
     char* program_file = argv[1];
@@ -41,8 +41,8 @@ int main(int argc, char** argv) {
 
     for (int action_index = 0; action_index < action_amount; action_index++) {
         char* current_action;
-        char regis = 0;
-        int  number;
+        char regis = '\0';
+        int  number = 0;
 
         if (sscanf(action_address[action_index], "%m[A-Za-z] %d", &current_action, &number) == 1) {
             free(current_action);
@@ -56,18 +56,18 @@ int main(int argc, char** argv) {
 
         switch (code_current_action) {
 
-            case (HTL):
+            case (CODE_HTL):
                 byte_code[current_byte_index++] = HTL;
 
                 break;
 
-            case (OUT):
+            case (CODE_OUT):
                 byte_code[current_byte_index++] = OUT;
 
                 break;
 
-            case (POP):
-                if (regis) {
+            case (CODE_POP):
+                if (regis >= 'a') {
                     byte_code[current_byte_index++] = POP_R; //Так?
                     byte_code[current_byte_index++] = regis- 'a' + 1;
 
@@ -79,8 +79,8 @@ int main(int argc, char** argv) {
 
                 break;
 
-            case (PUSH):
-                if (regis) {
+            case (CODE_PUSH):
+                if (regis >= 'a') {
                     byte_code[current_byte_index++] = PUSH_R;
                     byte_code[current_byte_index++] = regis - 'a' + 1;
 
@@ -93,22 +93,22 @@ int main(int argc, char** argv) {
 
                 break;
 
-            case (ADD):
+            case (CODE_ADD):
                 byte_code[current_byte_index++] = ADD;
 
                 break;
 
-            case (SUB):
+            case (CODE_SUB):
                 byte_code[current_byte_index++] = SUB;
 
                 break;
 
-            case (DIV):
+            case (CODE_DIV):
                 byte_code[current_byte_index++] = DIV;
 
                 break;
 
-            case (MUL):
+            case (CODE_MUL):
                 byte_code[current_byte_index++] = MUL;
 
                 break;
@@ -118,11 +118,10 @@ int main(int argc, char** argv) {
     }
 
 
-    // printf("current index: %d \n", current_byte_index);
-    // // printf("array size: %d \n", sizeof(byte_code)/sizeof(byte_code[0]));
-    // for (int i = 0; i <= AMOUNT_USED_BYTES; i++) {
-    //     printf("%d ", byte_code[i]);
-    // }
+    printf("current index: %d \n", current_byte_index);
+    for (int i = 0; i < AMOUNT_USED_BYTES; i++) {
+        printf("%d ", byte_code[i]);
+    }
 
     FILE* bite_code_file = fopen("byte_code_file.txt", "w");
     fwrite(byte_code, sizeof(byte_code[0]), AMOUNT_USED_BYTES, bite_code_file);
